@@ -1,0 +1,33 @@
+---
+interface Props {
+  eyebrow: string;
+  title: string;
+  lede?: string;
+}
+
+const { eyebrow, title, lede } = Astro.props;
+---
+
+<div class="heading col">
+  <p class="eyebrow">{eyebrow}</p>
+  <h1 class="section-title">{title}</h1>
+  {lede && <p class="lede">{lede}</p>}
+</div>
+
+<style>
+  .heading {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    padding-top: calc(var(--hero-top) / 1.5);
+  }
+
+  .section-title {
+    margin-top: var(--eyebrow-gap);
+  }
+
+  .lede {
+    margin-top: 16px;
+  }
+</style>

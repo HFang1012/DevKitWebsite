@@ -1,0 +1,29 @@
+---
+import Base from '../layouts/Base.astro';
+import PageHeading from '../components/PageHeading.astro';
+import ReleaseCard from '../components/ReleaseCard.astro';
+import { releases } from '../data/releases';
+import { site } from '../data/site';
+---
+
+<Base title="Releases" description="Every DevKit release, with downloads and what changed.">
+  <PageHeading
+    eyebrow="Releases"
+    title="What's new in DevKit"
+    lede={`Every build, newest first. DevKit needs ${site.requirement}.`}
+  />
+
+  <div class="list col">
+    {releases.map((release, i) => <ReleaseCard release={release} latest={i === 0} />)}
+  </div>
+</Base>
+
+<style>
+  .list {
+    display: flex;
+    flex-direction: column;
+    gap: var(--grid-gap);
+    max-width: calc(720px + var(--gutter) * 2);
+    margin-top: 64px;
+  }
+</style>

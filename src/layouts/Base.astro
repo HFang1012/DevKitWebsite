@@ -1,0 +1,67 @@
+---
+import '../styles/global.css';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import { site } from '../data/site';
+
+interface Props {
+  title?: string;
+  description?: string;
+  // The home page carries the hero glow; inner pages stay flat.
+  glow?: boolean;
+}
+
+const { title, description = site.description, glow = false } = Astro.props;
+const pageTitle = title ? `${title} · ${site.name}` : `${site.name} · Tools at the edge of your Mac`;
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content={description} />
+    <meta name="theme-color" content="#111111" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <title>{pageTitle}</title>
+  </head>
+  <body>
+    <div class:list={['backdrop', { glow }]} aria-hidden="true"></div>
+    <Header />
+    <main>
+      <slot />
+    </main>
+    <Footer />
+  </body>
+</html>
+
+<style>
+  .backdrop {
+    position: absolute;
+    inset: 0 0 auto 0;
+    height: 900px;
+    z-index: 0;
+    pointer-events: none;
+    background-image: radial-gradient(var(--dot) 1px, transparent 1px);
+    background-size: 24px 24px;
+    /* The dot grid fades out before the content below the fold. */
+    mask-image: linear-gradient(to bottom, rgba(0, 0, 0, 0.5), transparent 80%);
+    -webkit-mask-image: linear-gradient(to bottom, rgba(0, 0, 0, 0.5), transparent 80%);
+  }
+
+  .backdrop.glow::after {
+    content: '';
+    position: absolute;
+    top: -240px;
+    left: 50%;
+    width: 1000px;
+    height: 700px;
+    transform: translateX(-50%);
+    background: radial-gradient(closest-side, var(--glow), transparent);
+  }
+
+  main {
+    position: relative;
+    z-index: 1;
+  }
+</style>

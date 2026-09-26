@@ -1,0 +1,46 @@
+/* Values mirror DESIGN-TOKENS.md. Change them there first. */
+:root {
+  /* Color */
+  --canvas: #111111;
+  --surface: #171717;
+  --text: #f4f4f1;
+  --muted: #a3a3a3;
+  --eyebrow: #737373;
+  --hairline: rgba(255, 255, 255, 0.08);
+  --teal-a: #5eead4;
+  --teal-b: #7dd3fc;
+  --glow: rgba(94, 234, 212, 0.12);
+  --dot: rgba(168, 162, 158, 0.3);
+  --gradient: linear-gradient(90deg, var(--teal-a), var(--teal-b));
+
+  /* Type */
+  --font: -apple-system, system-ui, sans-serif;
+
+  /* Space */
+  --gutter: 24px;
+  --col: 896px;
+  --frame: 1120px;
+  --header: 68px;
+  --hero-top: 144px;
+  --eyebrow-gap: 24px;
+  --lede-gap: 24px;
+  --cta-gap: 40px;
+  --frame-gap: 64px;
+  --section: 128px;
+  --grid-gap: 32px;
+  --card-pad: 24px;
+  --nav-gap: 28px;
+
+  /* Shape */
+  --r-pill: 999px;
+  --r-card: 16px;
+  --button-height: 44px;
+  --nav-button-height: 32px;
+}
+
+@media (max-width: 800px) {
+  :root {
+    --hero-top: 88px;
+    --section: 96px;
+  }
+}

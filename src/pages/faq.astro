@@ -1,0 +1,104 @@
+---
+import Base from '../layouts/Base.astro';
+import PageHeading from '../components/PageHeading.astro';
+
+// Draft answers from APP.md. Replace or extend before launch.
+const faqs = [
+  {
+    q: 'What is DevKit?',
+    a: 'A background macOS utility that lives at the edge of your screen. Press the edge, a Utility Belt slides in, and a tool opens from its icon. Move away and it is gone.',
+  },
+  {
+    q: 'Which Macs does it run on?',
+    a: 'DevKit needs macOS 14 or later.',
+  },
+  {
+    q: 'Will it resize or rearrange my other apps?',
+    a: 'No. The belt overlays whatever you are doing. Safari, Xcode, Finder, and games stay full screen underneath it.',
+  },
+  {
+    q: 'Which tools come with it?',
+    a: 'Replay, Converter, Shrinker, Clipboard, Notes, Stats, and Tasks. Profiles decide which ones sit on each belt.',
+  },
+  {
+    q: 'Why does it ask for Screen Recording or Accessibility?',
+    a: 'Replay needs Screen Recording to keep its rolling buffer. Global keyboard shortcuts need Accessibility so they reach other apps.',
+  },
+  {
+    q: 'Does it cost anything?',
+    a: 'Placeholder: pricing details are coming soon.',
+  },
+];
+---
+
+<Base title="FAQ" description="Answers to common questions about DevKit.">
+  <PageHeading
+    eyebrow="FAQ"
+    title="Frequently asked questions"
+    lede="Short answers to what people ask most. More are on the way."
+  />
+
+  <div class="list col">
+    {
+      faqs.map((item) => (
+        <details class="item">
+          <summary>
+            <span class="card-title">{item.q}</span>
+            <svg class="chevron" viewBox="0 0 24 24" width="16" height="16" aria-hidden="true">
+              <path d="M6 9l6 6 6-6" />
+            </svg>
+          </summary>
+          <p class="card-body">{item.a}</p>
+        </details>
+      ))
+    }
+  </div>
+</Base>
+
+<style>
+  .list {
+    max-width: calc(720px + var(--gutter) * 2);
+    margin-top: 64px;
+  }
+
+  .item {
+    border-bottom: 1px solid var(--hairline);
+  }
+
+  .item:first-child {
+    border-top: 1px solid var(--hairline);
+  }
+
+  summary {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    padding: 20px 4px;
+    cursor: pointer;
+    list-style: none;
+  }
+
+  summary::-webkit-details-marker {
+    display: none;
+  }
+
+  .chevron {
+    flex-shrink: 0;
+    fill: none;
+    stroke: var(--muted);
+    stroke-width: 2;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    transition: transform 150ms ease;
+  }
+
+  .item[open] .chevron {
+    transform: rotate(180deg);
+  }
+
+  .card-body {
+    padding: 0 4px 20px;
+    max-width: 620px;
+  }
+</style>

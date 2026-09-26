@@ -1,0 +1,96 @@
+---
+// Placeholders until the team fills in real names, roles, and bios.
+const members = [
+  { initials: 'A', name: 'Name', role: 'Role', bio: 'A sentence about what this person builds on DevKit.' },
+  { initials: 'B', name: 'Name', role: 'Role', bio: 'A sentence about what this person builds on DevKit.' },
+  { initials: 'C', name: 'Name', role: 'Role', bio: 'A sentence about what this person builds on DevKit.' },
+];
+---
+
+<section class="team col section" aria-labelledby="team-title">
+  <p class="eyebrow">Who we are</p>
+  <h2 id="team-title" class="section-title">The team</h2>
+  <p class="lede">
+    DevKit is built by three developers who wanted their Mac tools one flick of the cursor away.
+  </p>
+
+  <ul class="grid">
+    {
+      members.map((m) => (
+        <li class="card member">
+          <span class="avatar" aria-hidden="true">{m.initials}</span>
+          <div>
+            <h3 class="card-title">{m.name}</h3>
+            <p class="role">{m.role}</p>
+          </div>
+          <p class="card-body">{m.bio}</p>
+        </li>
+      ))
+    }
+  </ul>
+</section>
+
+<style>
+  .team {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+
+  .section-title {
+    margin-top: var(--eyebrow-gap);
+  }
+
+  .lede {
+    margin-top: 16px;
+  }
+
+  .grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--grid-gap);
+    width: 100%;
+    margin: 64px 0 0;
+    padding: 0;
+    list-style: none;
+    text-align: left;
+  }
+
+  @media (min-width: 700px) {
+    .grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+
+  @media (min-width: 960px) {
+    .grid {
+      grid-template-columns: repeat(3, 1fr);
+    }
+  }
+
+  .member {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  .avatar {
+    display: grid;
+    place-items: center;
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    border: 1px solid var(--hairline);
+    background: rgba(255, 255, 255, 0.04);
+    font-size: 16px;
+    font-weight: 600;
+    color: var(--muted);
+  }
+
+  .role {
+    margin-top: 4px;
+    font-size: 14px;
+    color: var(--eyebrow);
+  }
+</style>

@@ -1,0 +1,75 @@
+---
+interface Props {
+  title: string;
+  body: string;
+  action: string;
+  href: string;
+}
+
+const { title, body, action, href } = Astro.props;
+---
+
+<article class="card tile">
+  <span class="icon" aria-hidden="true"><slot name="icon" /></span>
+  <h2 class="card-title">{title}</h2>
+  <p class="card-body">{body}</p>
+  <a class="action" href={href}>
+    {action} <span class="arrow" aria-hidden="true">→</span>
+  </a>
+</article>
+
+<style>
+  .tile {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    padding: 32px;
+  }
+
+  .icon {
+    display: grid;
+    place-items: center;
+    width: 44px;
+    height: 44px;
+    margin-bottom: 8px;
+    border: 1px solid var(--hairline);
+    border-radius: 12px;
+    background: rgba(255, 255, 255, 0.03);
+    color: var(--text);
+  }
+
+  .icon :global(svg) {
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 1.8;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+
+  .card-title {
+    font-size: 18px;
+  }
+
+  .action {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    align-self: flex-start;
+    margin-top: 12px;
+    font-size: 15px;
+    font-weight: 500;
+    background: var(--gradient);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+
+  .arrow {
+    display: inline-block;
+    transition: transform 150ms ease;
+  }
+
+  .action:hover .arrow {
+    transform: translateX(3px);
+  }
+</style>

@@ -1,0 +1,54 @@
+---
+import Base from '../layouts/Base.astro';
+import PageHeading from '../components/PageHeading.astro';
+import SupportTile from '../components/SupportTile.astro';
+---
+
+<Base title="Support us" description="Help keep DevKit free and moving.">
+  <PageHeading
+    eyebrow="Support us"
+    title="Help keep DevKit going"
+    lede="DevKit is built by a small team in its spare time. If it saves you a few seconds every day, a coffee or a monthly pledge helps us keep shipping."
+  />
+
+  <div class="tiles col">
+    <!-- Placeholder links until the Ko-fi and Patreon pages exist. -->
+    <SupportTile
+      title="Ko-fi"
+      body="Buy the team a coffee with a one-time tip. No account needed."
+      action="Support on Ko-fi"
+      href="#"
+    >
+      <svg slot="icon" viewBox="0 0 24 24" width="22" height="22">
+        <path d="M4 8h12v6a5 5 0 0 1-5 5H9a5 5 0 0 1-5-5V8Z M16 10h1.5a2.5 2.5 0 0 1 0 5H16 M8 4v1.5 M12 4v1.5" />
+      </svg>
+    </SupportTile>
+
+    <SupportTile
+      title="Patreon"
+      body="Back DevKit every month and follow along as new tools land."
+      action="Become a Patron"
+      href="#"
+    >
+      <svg slot="icon" viewBox="0 0 24 24" width="22" height="22">
+        <path d="M12 20s-7-4.35-7-10a4 4 0 0 1 7-2.65A4 4 0 0 1 19 10c0 5.65-7 10-7 10Z" />
+      </svg>
+    </SupportTile>
+  </div>
+</Base>
+
+<style>
+  .tiles {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--grid-gap);
+    max-width: calc(720px + var(--gutter) * 2);
+    margin-top: 64px;
+  }
+
+  @media (min-width: 700px) {
+    .tiles {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+</style>

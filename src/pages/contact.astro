@@ -1,0 +1,76 @@
+---
+import Base from '../layouts/Base.astro';
+import PageHeading from '../components/PageHeading.astro';
+import { contact } from '../data/site';
+
+const rows = [
+  { label: 'Email', value: contact.email, href: `mailto:${contact.email}` },
+  { label: 'GitHub', value: contact.github.label, href: contact.github.href },
+  { label: 'Social', value: contact.social.label, href: contact.social.href },
+];
+---
+
+<Base title="Contact" description="Get in touch with the DevKit team.">
+  <PageHeading
+    eyebrow="Contact"
+    title="Get in touch"
+    lede="Found a bug, have an idea for a tool, or just want to say hi? Reach us here."
+  />
+
+  <div class="col wrap">
+    <ul class="card rows">
+      {
+        rows.map((row) => (
+          <li>
+            <span class="label">{row.label}</span>
+            <a href={row.href} class="value">
+              {row.value}
+            </a>
+          </li>
+        ))
+      }
+    </ul>
+  </div>
+</Base>
+
+<style>
+  .wrap {
+    max-width: calc(560px + var(--gutter) * 2);
+    margin-top: 64px;
+  }
+
+  .rows {
+    margin: 0;
+    padding: 8px var(--card-pad);
+    list-style: none;
+  }
+
+  li {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    padding: 16px 0;
+  }
+
+  li + li {
+    border-top: 1px solid var(--hairline);
+  }
+
+  .label {
+    font-size: 14px;
+    color: var(--eyebrow);
+  }
+
+  .value {
+    font-size: 15px;
+    color: var(--text);
+    transition: color 150ms ease;
+    overflow-wrap: anywhere;
+    text-align: right;
+  }
+
+  .value:hover {
+    color: var(--muted);
+  }
+</style>

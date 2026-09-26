@@ -1,0 +1,105 @@
+---
+import Button from './Button.astro';
+import { nav, site } from '../data/site';
+
+const current = Astro.url.pathname.replace(/\/$/, '') || '/';
+---
+
+<header class="header">
+  <div class="inner">
+    <a href="/" class="logo" aria-label="DevKit home">
+      <span class="mark" aria-hidden="true"></span>
+      DevKit
+    </a>
+
+    <nav class="links" aria-label="Primary">
+      {
+        nav.map((item) => (
+          <a
+            href={item.href}
+            class:list={['link', { active: current === item.href }]}
+            aria-current={current === item.href ? 'page' : undefined}
+          >
+            {item.label}
+          </a>
+        ))
+      }
+    </nav>
+
+    <div class="action">
+      <Button href={site.downloadHref} size="sm">Download</Button>
+    </div>
+  </div>
+</header>
+
+<style>
+  .header {
+    position: relative;
+    z-index: 1;
+  }
+
+  .inner {
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+    align-items: center;
+    min-height: var(--header);
+    max-width: calc(var(--frame) + var(--gutter) * 2);
+    margin-inline: auto;
+    padding-inline: var(--gutter);
+  }
+
+  .logo {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    justify-self: start;
+    font-size: 16px;
+    font-weight: 600;
+    letter-spacing: -0.01em;
+  }
+
+  /* A tiny belt: the product's one visual idea, as a logo mark. */
+  .mark {
+    width: 8px;
+    height: 20px;
+    border-radius: var(--r-pill);
+    background: var(--text);
+  }
+
+  .links {
+    display: flex;
+    gap: var(--nav-gap);
+  }
+
+  .link {
+    font-size: 14px;
+    line-height: 1;
+    color: var(--muted);
+    transition: color 150ms ease;
+  }
+
+  .link:hover,
+  .link.active {
+    color: var(--text);
+  }
+
+  .action {
+    justify-self: end;
+  }
+
+  @media (max-width: 800px) {
+    .inner {
+      grid-template-columns: 1fr auto;
+      row-gap: 4px;
+      padding-block: 16px;
+    }
+
+    .links {
+      grid-column: 1 / -1;
+      grid-row: 2;
+      flex-wrap: wrap;
+      gap: 12px 24px;
+      padding-top: 8px;
+    }
+  }
+</style>

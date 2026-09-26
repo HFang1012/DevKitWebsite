@@ -1,0 +1,61 @@
+---
+import { contact, nav, site } from '../data/site';
+---
+
+<footer class="footer">
+  <div class="inner">
+    <div class="meta">
+      <p class="product">{site.name} {site.version}</p>
+      <p>{site.requirement}</p>
+    </div>
+
+    <nav class="group" aria-label="Footer">
+      {nav.map((item) => <a href={item.href}>{item.label}</a>)}
+    </nav>
+
+    <div class="group">
+      <a href={`mailto:${contact.email}`}>{contact.email}</a>
+      <a href={contact.github.href}>GitHub</a>
+      <a href={contact.social.href}>{contact.social.label}</a>
+    </div>
+  </div>
+</footer>
+
+<style>
+  .footer {
+    margin-top: var(--section);
+    border-top: 1px solid var(--hairline);
+    font-size: 14px;
+    line-height: 1.5;
+    color: var(--eyebrow);
+  }
+
+  .inner {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: 24px 48px;
+    max-width: calc(var(--frame) + var(--gutter) * 2);
+    margin-inline: auto;
+    padding: 40px var(--gutter) 48px;
+  }
+
+  .product {
+    color: var(--muted);
+  }
+
+  .group {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px 24px;
+    align-items: flex-start;
+  }
+
+  .group a {
+    transition: color 150ms ease;
+  }
+
+  .group a:hover {
+    color: var(--text);
+  }
+</style>

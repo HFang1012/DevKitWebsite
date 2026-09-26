@@ -1,0 +1,51 @@
+---
+import Button from './Button.astro';
+import { site } from '../data/site';
+---
+
+<section class="hero col">
+  <p class="eyebrow">macOS utility</p>
+  <h1 class="display">
+    Your tools, one brush of the <span class="gradient-text">screen edge</span> away
+  </h1>
+  <p class="lede">
+    DevKit lives at the edge of your screen and overlays whatever you are doing. Press the edge, a
+    Utility Belt slides in, and a tool opens from its icon. Your other apps stay full screen and are
+    never resized.
+  </p>
+  <div class="cta">
+    <Button href={site.downloadHref}>Download for Mac</Button>
+    <p class="requirement">{site.requirement}</p>
+  </div>
+</section>
+
+<style>
+  .hero {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    padding-top: var(--hero-top);
+  }
+
+  .display {
+    margin-top: var(--eyebrow-gap);
+  }
+
+  .lede {
+    margin-top: var(--lede-gap);
+  }
+
+  .cta {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+    margin-top: var(--cta-gap);
+  }
+
+  .requirement {
+    font-size: 14px;
+    color: var(--eyebrow);
+  }
+</style>

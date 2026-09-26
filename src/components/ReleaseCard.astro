@@ -1,0 +1,132 @@
+---
+import Button from './Button.astro';
+import type { ChangeCategory, Release } from '../data/releases';
+
+interface Props {
+  release: Release;
+  latest?: boolean;
+}
+
+const { release, latest = false } = Astro.props;
+
+const order: ChangeCategory[] = ['Added', 'Changed', 'Fixed', 'Removed'];
+const groups = order
+  .map((category) => ({ category, items: release.changes[category] ?? [] }))
+  .filter((group) => group.items.length > 0);
+
+const date = new Date(`${release.date}T12:00:00`).toLocaleDateString('en-US', {
+  year: 'numeric',
+  month: 'long',
+  day: 'numeric',
+});
+---
+
+<article class="card release" id={`v${release.version}`}>
+  <header class="top">
+    <div>
+      <div class="title-row">
+        <h2 class="version">{release.version}</h2>
+        {latest && <span class="tag">Latest</span>}
+      </div>
+      <p class="meta">
+        <time datetime={release.date}>{date}</time> · Build {release.build}
+      </p>
+    </div>
+    <Button
+      href={release.downloadHref}
+      variant={latest ? 'primary' : 'secondary'}
+      size="sm"
+      label={`Download DevKit ${release.version}`}
+    >
+      Download
+    </Button>
+  </header>
+
+  <div class="notes">
+    {
+      groups.map((group) => (
+        <section>
+          <h3 class="eyebrow category">{group.category}</h3>
+          <ul>
+            {group.items.map((item) => (
+              <li>
+                <p class="card-title">{item.title}</p>
+                <p class="card-body">{item.body}</p>
+              </li>
+            ))}
+          </ul>
+        </section>
+      ))
+    }
+  </div>
+</article>
+
+<style>
+  .release {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+  }
+
+  .top {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 16px;
+  }
+
+  .title-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .version {
+    font-size: 22px;
+    font-weight: 600;
+    letter-spacing: -0.02em;
+    line-height: 1.2;
+  }
+
+  .tag {
+    padding: 4px 10px;
+    border: 1px solid var(--hairline);
+    border-radius: var(--r-pill);
+    font-size: 12px;
+    font-weight: 500;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--eyebrow);
+  }
+
+  .meta {
+    margin-top: 6px;
+    font-size: 14px;
+    color: var(--eyebrow);
+  }
+
+  .notes {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    padding-top: 20px;
+    border-top: 1px solid var(--hairline);
+  }
+
+  .category {
+    font-size: 12px;
+  }
+
+  ul {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    margin: 12px 0 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  li .card-body {
+    margin-top: 4px;
+  }
+</style>
