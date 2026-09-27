@@ -1,3 +1,10 @@
+/** Root-relative path, prefixed with the GitHub Pages base. */
+export function url(path = '/'): string {
+  const base = import.meta.env.BASE_URL;
+  const normalized = path.replace(/^\/+|\/+$/g, '');
+  return normalized ? `${base}${normalized}/` : base;
+}
+
 export const site = {
   name: 'DevKit',
   version: '0.33.2',
@@ -10,10 +17,10 @@ export const site = {
 };
 
 export const nav = [
-  { label: 'Releases', href: '/releases' },
-  { label: 'FAQ', href: '/faq' },
-  { label: 'Support us', href: '/support' },
-  { label: 'Contact', href: '/contact' },
+  { label: 'Releases', href: url('/releases') },
+  { label: 'FAQ', href: url('/faq') },
+  { label: 'Support us', href: url('/support') },
+  { label: 'Contact', href: url('/contact') },
 ];
 
 // Placeholders: swap in real addresses before launch.

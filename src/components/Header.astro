@@ -1,13 +1,14 @@
 ---
 import Button from './Button.astro';
-import { nav, site } from '../data/site';
+import { nav, site, url } from '../data/site';
 
-const current = Astro.url.pathname.replace(/\/$/, '') || '/';
+const normalize = (path: string) => path.replace(/\/+$/, '') || '/';
+const current = normalize(Astro.url.pathname);
 ---
 
 <header class="header">
   <div class="inner">
-    <a href="/" class="logo" aria-label="DevKit home">
+    <a href={url('/')} class="logo" aria-label="DevKit home">
       <span class="mark" aria-hidden="true"></span>
       DevKit
     </a>
@@ -17,8 +18,8 @@ const current = Astro.url.pathname.replace(/\/$/, '') || '/';
         nav.map((item) => (
           <a
             href={item.href}
-            class:list={['link', { active: current === item.href }]}
-            aria-current={current === item.href ? 'page' : undefined}
+            class:list={['link', { active: current === normalize(item.href) }]}
+            aria-current={current === normalize(item.href) ? 'page' : undefined}
           >
             {item.label}
           </a>
