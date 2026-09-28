@@ -90,6 +90,7 @@ Footer carries version `0.33.2`, the macOS requirement, and quiet links. A hairl
 - Tools, one line each: Replay, Converter, Shrinker, Clipboard, Notes, Stats, Tasks.
 - Session: press the edge, the belt slides in, a tool opens from its icon, Escape hides it, work continues.
 - Footer: DevKit 0.33.2, macOS 14 or later.
+- Writing style: Keep it concise but informative, do not conform to typical AI writing styles. For example "Every build, newest first." is a bad example.
 
 ## Reference measures
 
