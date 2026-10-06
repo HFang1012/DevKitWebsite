@@ -1,5 +1,11 @@
-// Copied from DevKit's CHANGELOG.md. Newest first; the first entry is shown as Latest.
-export type ChangeCategory = 'Added' | 'Changed' | 'Fixed' | 'Removed';
+// Every DevKit release, read from this repository's GitHub Releases when the
+// site builds. DevKit's release workflow publishes each one (with its .dmg and
+// the notes from DevKit's CHANGELOG.md), and publishing a release redeploys
+// the site -- so nothing here is edited by hand.
+//
+// Newest first; the first entry is shown as Latest.
+
+export type ChangeCategory = 'Added' | 'Changed' | 'Deprecated' | 'Removed' | 'Fixed' | 'Security';
 
 export interface Change {
   title: string;
@@ -10,100 +16,134 @@ export interface Release {
   version: string;
   build: number;
   date: string;
-  // Placeholder until builds are hosted.
   downloadHref: string;
   changes: Partial<Record<ChangeCategory, Change[]>>;
 }
 
-export const releases: Release[] = [
-  {
-    version: '0.33.2',
-    build: 73,
-    date: '2026-09-25',
-    downloadHref: '#',
-    changes: {
-      Changed: [
-        {
-          title: 'Save on belt click is off to begin with, and says what it costs.',
-          body: "An icon that writes a file the moment it is clicked is not what the rest of the belt does, so it is now something you turn on rather than something you discover. Switched on, Replay's settings say plainly that a click saves with nothing to confirm, and that the panel moves to a right-click in place of the belt's usual menu.",
-        },
-      ],
-    },
-  },
-  {
-    version: '0.33.1',
-    build: 72,
-    date: '2026-09-25',
-    downloadHref: '#',
-    changes: {
-      Fixed: [
-        {
-          title: 'Recording a shortcut from a tool panel works.',
-          body: 'Clicking Shortcut started listening, but a tool panel is non-activating, so DevKit never came to the front and the chord went to whatever app was there instead. The field waited and nothing arrived. DevKit now takes the front for the moment it takes to read one chord.',
-        },
-      ],
-    },
-  },
-  {
-    version: '0.33.0',
-    build: 71,
-    date: '2026-09-25',
-    downloadHref: '#',
-    changes: {
-      Added: [
-        {
-          title: 'Save on belt click is back, as a setting.',
-          body: "Replay's gear has the switch again: on, a click on the belt icon saves the buffer and a right-click opens the panel; off, a click opens Replay and the icon keeps the belt's usual menu. The Saved confirmation beside the belt shows either way.",
-        },
-      ],
-    },
-  },
-  {
-    version: '0.32.1',
-    build: 70,
-    date: '2026-09-25',
-    downloadHref: '#',
-    changes: {
-      Fixed: [
-        {
-          title: 'DevKit no longer crashes on launch.',
-          body: 'It read its appearance setting onto the application before macOS had finished creating one, which on some Macs stopped the app dead before its first window. The appearance is applied once the application is there, which is where it was already being set a second time.',
-        },
-      ],
-    },
-  },
-  {
-    version: '0.32.0',
-    build: 69,
-    date: '2026-09-24',
-    downloadHref: '#',
-    changes: {
-      Changed: [
-        {
-          title: 'A click on Replay opens it.',
-          body: 'The belt icon no longer saves the buffer. A click opens the panel, and a right-click shows the same menu as every other tool: Open, Settings, Favorite, Pin, and the rest.',
-        },
-      ],
-      Added: [
-        {
-          title: 'Saving Replay shows a short confirmation.',
-          body: "A small \"Saved\" popup appears beside the belt, next to Replay's icon, and fades out after a second. It stays off the belt itself.",
-        },
-      ],
-    },
-  },
-  {
-    version: '0.31.1',
-    build: 68,
-    date: '2026-09-24',
-    downloadHref: '#',
-    changes: {
-      Fixed: [
-        {
-          title: 'Opening a Stats row no longer shoves the panel for a frame.',
-          body: 'The history graph was laid out inside the previous window height, so the rows jumped and then snapped back. The panel now takes the new height on the same turn the graph appears.',
-        },
-      ],
-    },
-  },
-];
+export const releasesRepo = 'HFang1012/DevKitWebsite';
+/** Where downloads live, and the fallback link when the list is unavailable. */
+export const releasesPage = `https://github.com/${releasesRepo}/releases`;
+
+const categories: ChangeCategory[] = ['Added', 'Changed', 'Deprecated', 'Removed', 'Fixed', 'Security'];
+
+interface GitHubRelease {
+  tag_name: string;
+  html_url: string;
+  body: string | null;
+  draft: boolean;
+  prerelease: boolean;
+  published_at: string | null;
+  assets: { name: string; browser_download_url: string }[];
+}
+
+/** Changelog text is Markdown; the cards show plain text. */
+function plain(text: string): string {
+  return text
+    .replace(/\[([^\]]+)\]\([^)]+\)/g, '$1')
+    .replace(/\*\*([^*]+)\*\*/g, '$1')
+    .replace(/(^|[\s(])[*_]([^*_]+)[*_](?=[\s).,;:!?]|$)/g, '$1$2')
+    .replace(/`([^`]+)`/g, '$1')
+    .replace(/\s+/g, ' ')
+    .trim();
+}
+
+/** "- **Title.** Body" becomes a titled change; an entry without a bold lead is all title. */
+function toChange(entry: string): Change {
+  const match = entry.match(/^\*\*(.+?)\*\*\s*(.*)$/s);
+  return match ? { title: plain(match[1]), body: plain(match[2]) } : { title: plain(entry), body: '' };
+}
+
+/**
+ * Splits notes written in DevKit's changelog style: "### Category" headings,
+ * "- " entries whose wrapped lines are indented, and a "---" before the
+ * install instructions, which are not part of the changes.
+ */
+function parseChanges(body: string): Release['changes'] {
+  const changes: Release['changes'] = {};
+  let category: ChangeCategory | null = null;
+  let entry: string | null = null;
+
+  const flush = () => {
+    if (category && entry) (changes[category] ??= []).push(toChange(entry.trim()));
+    entry = null;
+  };
+
+  for (const line of body.split(/\r?\n/)) {
+    if (/^---\s*$/.test(line)) break;
+    const heading = line.match(/^###\s+(.+?)\s*$/);
+    if (heading) {
+      flush();
+      category = categories.find((name) => name === heading[1]) ?? null;
+    } else if (line.startsWith('- ')) {
+      flush();
+      entry = line.slice(2);
+    } else if (entry !== null && /^\s+\S/.test(line)) {
+      entry += ` ${line.trim()}`;
+    } else if (line.trim() !== '') {
+      flush();
+    }
+  }
+  flush();
+  return changes;
+}
+
+/** The workflow's hidden first line: <!-- devkit-release version=… build=… date=… -->. */
+function metadata(body: string): Record<string, string> {
+  const comment = body.match(/<!--\s*devkit-release\s+([^>]*?)\s*-->/);
+  if (!comment) return {};
+  return Object.fromEntries(comment[1].split(/\s+/).map((pair) => pair.split('=') as [string, string]));
+}
+
+function compareVersions(a: string, b: string): number {
+  const pa = a.split('.').map(Number);
+  const pb = b.split('.').map(Number);
+  for (let i = 0; i < Math.max(pa.length, pb.length); i += 1) {
+    const diff = (pa[i] ?? 0) - (pb[i] ?? 0);
+    if (diff !== 0) return diff;
+  }
+  return 0;
+}
+
+function toRelease(release: GitHubRelease): Release {
+  const body = release.body ?? '';
+  const meta = metadata(body);
+  const dmg = release.assets.find((asset) => asset.name.endsWith('.dmg'));
+  return {
+    version: meta.version ?? release.tag_name.replace(/^v/, ''),
+    build: Number(meta.build ?? 0),
+    // A backfilled release is published long after it shipped; the changelog date wins.
+    date: meta.date ?? (release.published_at ?? '').slice(0, 10),
+    downloadHref: dmg?.browser_download_url ?? release.html_url,
+    changes: parseChanges(body),
+  };
+}
+
+async function loadReleases(): Promise<Release[]> {
+  const headers: Record<string, string> = {
+    Accept: 'application/vnd.github+json',
+    'User-Agent': 'devkit-website',
+  };
+  // The deploy workflow passes its token, which lifts the anonymous rate limit.
+  if (process.env.GITHUB_TOKEN) headers.Authorization = `Bearer ${process.env.GITHUB_TOKEN}`;
+
+  try {
+    const response = await fetch(`https://api.github.com/repos/${releasesRepo}/releases?per_page=100`, {
+      headers,
+    });
+    if (!response.ok) throw new Error(`GitHub answered ${response.status} ${response.statusText}`);
+    const all = (await response.json()) as GitHubRelease[];
+    return all
+      .filter((release) => !release.draft && !release.prerelease)
+      .map(toRelease)
+      .sort((a, b) => compareVersions(b.version, a.version));
+  } catch (error) {
+    // In CI a failed fetch fails the build, so the live site keeps its last
+    // good deploy instead of losing its download links. Locally, carry on.
+    if (process.env.CI) throw error;
+    console.warn(`[releases] Could not load releases: ${error}`);
+    return [];
+  }
+}
+
+export const releases: Release[] = await loadReleases();
+export const latestRelease: Release | undefined = releases[0];

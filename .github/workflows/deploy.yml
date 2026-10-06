@@ -3,7 +3,17 @@ name: Deploy to GitHub Pages
 on:
   push:
     branches: [main]
+  # DevKit's release workflow publishes here; the site lists releases and links
+  # the newest download, so every published, edited, or deleted release rebuilds it.
+  release:
+    types: [published, edited, deleted]
   workflow_dispatch:
+
+# One deploy at a time. A backfill publishes several releases in a row; the
+# queued deploy that runs last reads every one of them.
+concurrency:
+  group: pages
+  cancel-in-progress: false
 
 permissions:
   contents: read
@@ -13,6 +23,9 @@ permissions:
 jobs:
   build:
     runs-on: ubuntu-latest
+    env:
+      # src/data/releases.ts reads the release list from the GitHub API.
+      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     steps:
       - name: Checkout your repository using git
         uses: actions/checkout@v7

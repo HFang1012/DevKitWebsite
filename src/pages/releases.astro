@@ -2,7 +2,7 @@
 import Base from '../layouts/Base.astro';
 import PageHeading from '../components/PageHeading.astro';
 import ReleaseCard from '../components/ReleaseCard.astro';
-import { releases } from '../data/releases';
+import { releases, releasesPage } from '../data/releases';
 import { site } from '../data/site';
 ---
 
@@ -15,10 +15,22 @@ import { site } from '../data/site';
 
   <div class="list col">
     {releases.map((release, i) => <ReleaseCard release={release} latest={i === 0} />)}
+    {
+      releases.length === 0 && (
+        <p class="card-body empty">
+          The release list is not available right now. Every download is on{' '}
+          <a href={releasesPage}>GitHub Releases</a>.
+        </p>
+      )
+    }
   </div>
 </Base>
 
 <style>
+  .empty {
+    text-align: center;
+  }
+
   .list {
     display: flex;
     flex-direction: column;

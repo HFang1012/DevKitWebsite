@@ -5,7 +5,7 @@ import { contact, nav, site } from '../data/site';
 <footer class="footer">
   <div class="inner">
     <div class="meta">
-      <p class="product">{site.name} {site.version}</p>
+      <p class="product">{site.version ? `${site.name} ${site.version}` : site.name}</p>
       <p>{site.requirement}</p>
     </div>
 

@@ -9,7 +9,7 @@ interface Props {
 
 const { release, latest = false } = Astro.props;
 
-const order: ChangeCategory[] = ['Added', 'Changed', 'Fixed', 'Removed'];
+const order: ChangeCategory[] = ['Added', 'Changed', 'Deprecated', 'Removed', 'Fixed', 'Security'];
 const groups = order
   .map((category) => ({ category, items: release.changes[category] ?? [] }))
   .filter((group) => group.items.length > 0);
