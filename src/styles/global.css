@@ -200,6 +200,14 @@ a {
   font-size: 14px;
 }
 
+/* The hero's Download for Mac: taller, with an icon and the version. */
+.btn-lg {
+  height: var(--button-height-lg);
+  padding: 0 32px 0 28px;
+  gap: 12px;
+  font-size: 18px;
+}
+
 @media (prefers-reduced-motion: reduce) {
   * {
     transition: none !important;

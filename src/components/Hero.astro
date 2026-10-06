@@ -14,7 +14,28 @@ import { site } from '../data/site';
     never resized.
   </p>
   <div class="cta">
-    <Button href={site.downloadHref}>Download for Mac</Button>
+    <Button
+      href={site.downloadHref}
+      size="lg"
+      label={site.version ? `Download DevKit ${site.version} for Mac` : 'Download DevKit for Mac'}
+    >
+      <svg class="download-icon" viewBox="0 0 24 24" width="26" height="26" aria-hidden="true">
+        <path
+          d="M6.5 19a4.5 4.5 0 0 1-.42-8.98A6 6 0 0 1 17.6 8.5 4.75 4.75 0 0 1 17.25 19H6.5Z"
+          fill="currentColor"
+        />
+        <path
+          d="M12 10.5v5.25m0 0-2.25-2.25M12 15.75l2.25-2.25"
+          fill="none"
+          stroke="var(--text)"
+          stroke-width="1.8"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        />
+      </svg>
+      Download for Mac
+      {site.version && <span class="download-version">v{site.version}</span>}
+    </Button>
     <p class="requirement">{site.requirement}</p>
   </div>
 </section>
@@ -42,6 +63,16 @@ import { site } from '../data/site';
     align-items: center;
     gap: 12px;
     margin-top: var(--cta-gap);
+  }
+
+  .download-icon {
+    flex: none;
+    color: #555552;
+  }
+
+  .download-version {
+    color: var(--eyebrow);
+    font-variant-numeric: tabular-nums;
   }
 
   .requirement {

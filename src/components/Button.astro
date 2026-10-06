@@ -2,7 +2,7 @@
 interface Props {
   href: string;
   variant?: 'primary' | 'secondary';
-  size?: 'md' | 'sm';
+  size?: 'md' | 'sm' | 'lg';
   class?: string;
   label?: string;
 }
@@ -13,7 +13,7 @@ const { href, variant = 'primary', size = 'md', class: className, label } = Astr
 <a
   href={href}
   aria-label={label}
-  class:list={['btn', `btn-${variant}`, size === 'sm' && 'btn-sm', className]}
+  class:list={['btn', `btn-${variant}`, size !== 'md' && `btn-${size}`, className]}
 >
   <slot />
 </a>

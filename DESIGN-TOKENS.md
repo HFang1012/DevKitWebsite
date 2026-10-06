@@ -66,14 +66,15 @@ Base unit `8px`.
 |---|---|---|
 | `pill` | 999px | Primary and nav buttons |
 | `card` | 16px | Tool cards and the product frame |
-| `button-height` | 44px | Hero button. Padding `12px 28px` |
+| `button-height` | 44px | Default button. Padding `12px 28px` |
+| `button-height-lg` | 60px | Hero Download for Mac. 18px label, 26px cloud-download icon, version in `eyebrow` gray. Padding `0 32px 0 28px` |
 | `nav-button-height` | 32px | Download pill in the header. Padding `0 16px` |
 
 ## Layout
 
 Header is transparent. Logo left, a few links centered, one light pill on the right.
 
-Hero is centered in `col`. One eyebrow, one headline, one paragraph, Download for Mac, then “macOS 14 or later”.
+Hero is centered in `col`. One eyebrow, one headline, one paragraph, the large Download for Mac button (icon, label, latest version), then the requirement line.
 
 Product frame sits under the hero, up to `frame` wide. One visual: the Utility Belt on a screen edge.
 
