@@ -43,6 +43,7 @@ const date = new Date(`${release.date}T12:00:00`).toLocaleDateString('en-US', {
   </header>
 
   <div class="notes">
+    {groups.length === 0 && <p class="card-body">Behind-the-scenes fixes. Nothing changes in the app.</p>}
     {
       groups.map((group) => (
         <section>
@@ -51,7 +52,7 @@ const date = new Date(`${release.date}T12:00:00`).toLocaleDateString('en-US', {
             {group.items.map((item) => (
               <li>
                 <p class="card-title">{item.title}</p>
-                <p class="card-body">{item.body}</p>
+                {item.body && <p class="card-body">{item.body}</p>}
               </li>
             ))}
           </ul>

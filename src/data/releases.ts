@@ -56,7 +56,8 @@ function toChange(entry: string): Change {
 /**
  * Splits notes written in DevKit's changelog style: "### Category" headings,
  * "- " entries whose wrapped lines are indented, and a "---" before the
- * install instructions, which are not part of the changes.
+ * install instructions, which are not part of the changes. "### Internal"
+ * (developer-only changes) is not a category here, so it is left out.
  */
 function parseChanges(body: string): Release['changes'] {
   const changes: Release['changes'] = {};
