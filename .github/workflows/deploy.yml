@@ -10,9 +10,11 @@ on:
   workflow_dispatch:
 
 # One deploy at a time. A backfill publishes several releases in a row; the
-# queued deploy that runs last reads every one of them.
+# queued deploy that runs last reads every one of them. A release event only
+# hands off (below), so it stays out of the queue and cannot be cancelled
+# while waiting in it.
 concurrency:
-  group: pages
+  group: ${{ github.event_name == 'release' && format('release-{0}', github.run_id) || 'pages' }}
   cancel-in-progress: false
 
 permissions:
@@ -21,7 +23,23 @@ permissions:
   id-token: write
 
 jobs:
+  # A release event runs on the release's tag, and the github-pages
+  # environment only accepts deploys from main. Start this workflow again on
+  # main instead -- workflow_dispatch is the one event the built-in token may
+  # trigger.
+  redeploy-from-main:
+    if: github.event_name == 'release'
+    runs-on: ubuntu-latest
+    permissions:
+      actions: write
+    steps:
+      - name: Deploy from main
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh workflow run deploy.yml --repo "$GITHUB_REPOSITORY" --ref main
+
   build:
+    if: github.event_name != 'release'
     runs-on: ubuntu-latest
     env:
       # src/data/releases.ts reads the release list from the GitHub API.
