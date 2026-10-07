@@ -203,9 +203,9 @@ a {
 /* The hero's Download for Mac: taller, with an icon and the version. */
 .btn-lg {
   height: var(--button-height-lg);
-  padding: 0 32px 0 28px;
-  gap: 12px;
-  font-size: 18px;
+  padding: 0 26px 0 22px;
+  gap: 10px;
+  font-size: 16px;
 }
 
 @media (prefers-reduced-motion: reduce) {
